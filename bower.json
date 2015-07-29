@@ -1,0 +1,16 @@
+{
+  "name": "iceball",
+  "version": "0.0.0",
+  "authors": [
+    "Susisu <susisu2413@yahoo.co.jp>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/susisu/iceball",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
