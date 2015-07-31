@@ -11,6 +11,11 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
-  ]
+    "tests",
+    "dev"
+  ],
+  "dependencies": {
+    "milktea": "susisu/milktea#~0.1.1",
+    "electronvolt": "susisu/eV#~1.0.2"
+  }
 }
