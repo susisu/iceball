@@ -16,7 +16,9 @@ gulp.task("webpack", function () {
                 "filename"     : "iceball.js"
             },
             "externals": {
-                "loquat": true
+                "milktea"     : true,
+                "electronvolt": true,
+                "window"      : true
             },
             "plugins": [
                 new webpack.webpack.BannerPlugin(
@@ -38,7 +40,9 @@ gulp.task("webpack-min", function () {
                 "filename"     : "iceball.min.js",
             },
             "externals": {
-                "loquat": true
+                "milktea"     : true,
+                "electronvolt": true,
+                "window"      : true
             },
             "plugins": [
                 new webpack.webpack.optimize.UglifyJsPlugin(),
