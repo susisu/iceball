@@ -1,5 +1,6 @@
 {
   "name": "iceball",
+  "main": "dist/iceball.min.js",
   "version": "0.0.0",
   "authors": [
     "Susisu <susisu2413@yahoo.co.jp>"
