@@ -174,7 +174,7 @@ var iceball =
             "configurable": true,
             "value": Music
         },
-        "play": {
+        "start": {
             "writable"    : true,
             "configurable": true,
             "value": function (startTime) {
@@ -197,8 +197,8 @@ var iceball =
         "TICK": {
             "value": "tick"
         },
-        "END": {
-            "value": "end"
+        "ENDED": {
+            "value": "ended"
         }
     });
 
@@ -267,6 +267,9 @@ var iceball =
             },
             "__WebAudioMusic__intervalCallback__": {
                 "value": intervalCallback.bind(this)
+            },
+            "__WebAudioMusic__onEnded__": {
+                "value": onEnded.bind(this)
             }
         });
     }
@@ -298,19 +301,23 @@ var iceball =
                 this["__WebAudioMusic__fps__"] = value;
             }
         },
-        "play": {
+        "start": {
             "writable"    : true,
             "configurable": true,
             "value": function (startTime) {
+                if (startTime === undefined) {
+                    startTime = 0.0;
+                }
                 this["__WebAudioMusic__isPlaying__"] = true;
 
                 var source = this["__WebAudioMusic__context__"].createBufferSource();
                 this["__WebAudioMusic__source__"] = source;
                 source.buffer = this["__WebAudioMusic__buffer__"];
                 source.connect(this["__WebAudioMusic__context__"].destination);
+                source.onended = this["__WebAudioMusic__onEnded__"];
                 source.start(this["__WebAudioMusic__context__"].currentTime, startTime);
 
-                this["__WebAudioMusic__timeOrigin__"] = this["__WebAudioMusic__context__"].currentTime
+                this["__WebAudioMusic__timeOrigin__"] = this["__WebAudioMusic__context__"].currentTime;
                 this["__WebAudioMusic__currentTime__"] = 0.0;
 
                 var interval = 1000.0 / Math.max(this["__WebAudioMusic__fps__"], 60.0);
@@ -325,6 +332,7 @@ var iceball =
                 if (this["__WebAudioMusic__isPlaying__"]) {
                     this["__WebAudioMusic__isPlaying__"] = false;
                     this["__WebAudioMusic__source__"].stop();
+                    this["__WebAudioMusic__source__"].onended = null;
                     window.clearInterval(this["__WebAudioMusic__intervalId__"]);
                     this["__WebAudioMusic__source__"] = null;
                     this["__WebAudioMusic__intervalId__"] = undefined;
@@ -332,6 +340,14 @@ var iceball =
             }
         }
     });
+
+    function onEnded() {
+        this.stop();
+        this.dispatchEvent(
+            new MusicEvent(MusicEvent.ENDED, false, false,
+                this["__WebAudioMusic__context__"].currentTime - this["__WebAudioMusic__timeOrigin__"])
+        );
+    }
 
     function intervalCallback() {
         var currentTime = this["__WebAudioMusic__currentTime__"];
